@@ -23,9 +23,11 @@ function App() {
 	return (
 		<>
 			<h1>Storylands</h1>
-			<a onClick={() => setCoordinates(null)}>Go back</a>
 			{coordinates ? (
-				<GridSlot {...slot} />
+				<div>
+					<a onClick={() => setCoordinates(null)}>Go back</a>
+					<GridSlot {...slot} />
+				</div>
 			) : (
 				<Grid coordinateSetter={setCoordinates} />
 			)}
