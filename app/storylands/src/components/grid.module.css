@@ -1,0 +1,17 @@
+.grid-container {
+	display: grid;
+	grid-template-rows: repeat(20, 1fr);
+	grid-template-columns: repeat(20, 1fr);
+	gap: 5px;
+}
+
+.grid-slot-link {
+	display: inline;
+	background-color: #666666;
+	width: 3vh;
+	height: 3vh;
+}
+
+.grid-slot-link:hover {
+	background-color: #3aa7f0;
+}
