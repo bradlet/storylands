@@ -11,5 +11,11 @@ pub mod storylands {
     }
 }
 
+#[account]
+#[derive(Default)]
+pub struct GridSlot {
+    data: u64,
+}
+
 #[derive(Accounts)]
 pub struct Initialize {}
