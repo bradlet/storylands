@@ -12,18 +12,19 @@ pub mod storylands {
 	}
 }
 
+// Note: Solana transaction limit: 1232 bytes.
 #[account]
 #[derive(Default)]
 pub struct GridSlot {
 	x: u8, // 1
 	y: u8, // 1
 	title: String, // Max size 100
-	img: [[u8; 32]; 32], // 32x32 8-bit image = 1024
     body: String, // Max size 300
+	img_preset: u8 // 1; presets select a provided image to display in the frontend. To forego a preset, select 0.
 }
 
 impl GridSlot {
-	const MAX_SIZE: usize = 1 + 1 + 100 + (32 * 32) + 300;
+	const MAX_SIZE: usize = 1 + 1 + 100 + 300 + 1;
 }
 
 #[derive(Accounts)]
