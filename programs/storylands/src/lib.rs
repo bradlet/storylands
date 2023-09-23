@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("2gYJ5iXaV5R8VisVa5iHcK1aijqZq13BkViCKjGecdyd");
+declare_id!("9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm");
 
 #[program]
 pub mod storylands {
