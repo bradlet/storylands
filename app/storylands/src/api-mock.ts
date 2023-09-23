@@ -6,7 +6,7 @@ export type GridSlotResponse = {
 	x: number;
 	y: number;
 	title: string;
-	img: Array<Array<number>>; // Intention is for this to be a 2d byte array used to describe pixel art.
+	imgPreset: number;
 	body: Array<string>;
 };
 
@@ -15,7 +15,7 @@ export function getStory(x: number, y: number): GridSlotResponse {
 		x,
 		y,
 		title: "The Abyssal Opening",
-		img: [[]], // TODO
+		imgPreset: 1,
 		body: [
 			"First Story: The earth around shakes in an unending tremor of horror. All around, it pulls away life, and vitality crumbles away into nothingness. There on the ground, as the void begins to take you -- an endlessly growing wall of black -- you peer in and understand: there's nothing left.",
 			"Story two: A test",
