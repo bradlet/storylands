@@ -11,6 +11,7 @@ describe("storylands", () => {
 
 	it("can save a story", async () => {
 		const gridSlotKeypair = anchor.web3.Keypair.generate();
+		console.log(`Test data saved at: ${gridSlotKeypair.publicKey}`)
 		const storyWriter = (program.provider as anchor.AnchorProvider).wallet;
 
 		await program.methods

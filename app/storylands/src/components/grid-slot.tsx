@@ -1,12 +1,22 @@
-import { GridSlotResponse } from "../api-mock";
 import classes from "./grid-slot.module.css";
 // Unecessary workaround to VS Code spurious error
 const { gridSlotContainer, slotDivider } = classes;
 
-export default function GridSlot({ x, y, title, body }: GridSlotResponse) {
-	const storySlots = body.map((story, index) => (
-		<StoryBodySlot key={index} story={story} />
-	));
+export type InitialGridSlot = {
+	x: number;
+	y: number;
+	title: string;
+	imgPreset: number;
+	body: string;
+};
+
+export function GridSlot(slot: InitialGridSlot) {
+	const { x, y, title, body } = slot;
+	// const storySlots = body.map((story, index) => (
+	// 	<StoryBodySlot key={index} story={story} />
+	// ));
+	const storySlots = <StoryBodySlot story={body} />;
+
 	return (
 		<>
 			<div>
