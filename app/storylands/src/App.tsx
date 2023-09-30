@@ -4,6 +4,7 @@ import { GridSlot, InitialGridSlot } from "./components/grid-slot";
 import Grid from "./components/grid";
 import { IDL } from "./idl/storylands";
 import BackIcon from "./assets/back-arrow-icon.svg?react";
+import defaultStorySlot from "./assets/default-story-slot.json";
 import "./App.css";
 
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
@@ -18,14 +19,6 @@ import { Connection } from "@solana/web3.js";
 const PROGRAM_ID = "9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm";
 const GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST =
 	"Fkf8svsZJUXmXSbYkAddR8Pcd311sMcj9c9h8HUdXTkT";
-
-const defaultStorySlot: InitialGridSlot = {
-	x: -1,
-	y: -1,
-	title: "Missing story",
-	imgPreset: -1,
-	body: "A wonderful story full of lots of crazy things",
-};
 
 function App() {
 	const [coordinates, setCoordinates] = useState<[number, number] | null>(
