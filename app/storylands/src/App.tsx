@@ -1,32 +1,23 @@
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "/vite.svg";
-import "./App.css";
-import { GridSlot, InitialGridSlot } from "./components/grid-slot";
-import { useState } from "react";
-import Grid from "./components/grid";
+import { useEffect, useState } from "react";
 
-import { useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
+import { GridSlot, InitialGridSlot } from "./components/grid-slot";
+import Grid from "./components/grid";
 import { IDL } from "./idl/storylands";
-import { AnchorProvider, Program, Wallet } from "@project-serum/anchor";
+import BackIcon from "./assets/back-arrow-icon.svg?react";
+import "./App.css";
+
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import {
+	AnchorProvider,
+	Program,
+	setProvider,
+	Wallet,
+} from "@project-serum/anchor";
+import { Connection } from "@solana/web3.js";
 
 const PROGRAM_ID = "9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm";
 const GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST =
 	"Fkf8svsZJUXmXSbYkAddR8Pcd311sMcj9c9h8HUdXTkT";
-
-const backIcon = (
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="24"
-		height="24"
-		viewBox="0 0 24 24"
-		className="back_arrow_icon"
-	>
-		<g>
-			<path d="M12,2A10,10,0,1,0,22,12,10.011,10.011,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,12,20Z" />
-			<polygon points="13.293 7.293 8.586 12 13.293 16.707 14.707 15.293 11.414 12 14.707 8.707 13.293 7.293" />
-		</g>
-	</svg>
-);
 
 const defaultStorySlot: InitialGridSlot = {
 	x: -1,
@@ -41,24 +32,41 @@ function App() {
 		null
 	);
 	const [slot, setSlot] = useState<InitialGridSlot>(defaultStorySlot);
-	const { connection } = useConnection();
+
+	const connection = new Connection("http://127.0.0.1:8899", "confirmed");
 	const wallet = useAnchorWallet();
-	const provider = new AnchorProvider(connection, wallet as Wallet, {});
 
-	const program = new Program(IDL, PROGRAM_ID, provider);
+	useEffect(() => {
+		try {
+			const provider = new AnchorProvider(
+				connection,
+				wallet as Wallet,
+				{}
+			);
+			setProvider(provider);
 
-	program.account.gridSlot
-		.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
-		.then((slot) => {
-			setSlot(slot);
-		});
+			const program = new Program(IDL, PROGRAM_ID);
+
+			// program.methods.saveStory(defaultStorySlot).rpc();
+
+			program.account.gridSlot
+				.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
+				.then((slot) => {
+					setSlot(slot);
+				});
+		} catch (e: unknown) {
+			console.error(e);
+		}
+	});
 
 	return (
 		<>
 			<h1>Storylands</h1>
 			{coordinates ? (
 				<div>
-					<a onClick={() => setCoordinates(null)}>{backIcon}</a>
+					<a onClick={() => setCoordinates(null)}>
+						<BackIcon />
+					</a>
 					<GridSlot {...slot} />
 				</div>
 			) : (
