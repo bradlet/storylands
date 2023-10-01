@@ -10,15 +10,27 @@
 	background-color: #666666;
 	width: 3vh;
 	height: 3vh;
-	transition: width 1s cubic-bezier(0.075, 0.82, 0.165, 1),
-		height 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+	/*
+	Note: left and top come from JS b/c those are calculated dynamically,
+	based on what grid slot link the user clicks.
+	*/
+	transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1),
+		width 1s cubic-bezier(0.075, 0.82, 0.165, 1),
+		height 1s cubic-bezier(0.075, 0.82, 0.165, 1),
+		left 1s cubic-bezier(0.075, 0.82, 0.165, 1),
+		top 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .grid-slot-link:hover {
-	background-color: #3aa7f0;
+	background-color: #67c6ec;
+}
+
+.grid-slot-clicked {
+	background-color: #ffffff !important;
 }
 
 .grid-slot-expanded {
-	width: 75vh;
-	height: 75vh;
+	width: 100vh;
+	height: 100vh;
+	transform: translate(-50%, -50%) scale(1);
 }
