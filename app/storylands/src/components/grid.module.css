@@ -10,8 +10,15 @@
 	background-color: #666666;
 	width: 3vh;
 	height: 3vh;
+	transition: width 1s cubic-bezier(0.075, 0.82, 0.165, 1),
+		height 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .grid-slot-link:hover {
 	background-color: #3aa7f0;
+}
+
+.grid-slot-expanded {
+	width: 75vh;
+	height: 75vh;
 }

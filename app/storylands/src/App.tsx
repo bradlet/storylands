@@ -26,27 +26,27 @@ function App() {
 	);
 	const [slot, setSlot] = useState<InitialGridSlot>(defaultStorySlot);
 
-	const connection = new Connection("http://127.0.0.1:8899", "confirmed");
-	const wallet = useAnchorWallet();
+	// const connection = new Connection("http://127.0.0.1:8899", "confirmed");
+	// const wallet = useAnchorWallet();
 
 	useEffect(() => {
 		try {
-			const provider = new AnchorProvider(
-				connection,
-				wallet as Wallet,
-				{}
-			);
-			setProvider(provider);
+			// const provider = new AnchorProvider(
+			// 	connection,
+			// 	wallet as Wallet,
+			// 	{}
+			// );
+			// setProvider(provider);
 
-			const program = new Program(IDL, PROGRAM_ID);
+			// const program = new Program(IDL, PROGRAM_ID);
 
-			// program.methods.saveStory(defaultStorySlot).rpc();
+			// // program.methods.saveStory(defaultStorySlot).rpc();
 
-			program.account.gridSlot
-				.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
-				.then((slot) => {
-					setSlot(slot);
-				});
+			// program.account.gridSlot
+			// 	.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
+			// 	.then((slot) => {
+			// 		setSlot(slot);
+			// 	});
 		} catch (e: unknown) {
 			console.error(e);
 		}
@@ -63,7 +63,7 @@ function App() {
 					<GridSlot {...slot} />
 				</div>
 			) : (
-				<Grid coordinateSetter={setCoordinates} />
+				<Grid id="grid" coordinateSetter={setCoordinates} />
 			)}
 		</>
 	);
