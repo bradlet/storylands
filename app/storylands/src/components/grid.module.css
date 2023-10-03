@@ -14,11 +14,11 @@
 	Note: left and top come from JS b/c those are calculated dynamically,
 	based on what grid slot link the user clicks.
 	*/
-	transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1),
-		width 1s cubic-bezier(0.075, 0.82, 0.165, 1),
-		height 1s cubic-bezier(0.075, 0.82, 0.165, 1),
-		left 1s cubic-bezier(0.075, 0.82, 0.165, 1),
-		top 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+	transition: background-color 1s cubic-bezier(0.45, 0.82, 0.165, 1),
+		width 1s cubic-bezier(0.45, 0.82, 0.165, 1),
+		height 1s cubic-bezier(0.45, 0.82, 0.165, 1),
+		left 1s cubic-bezier(0.45, 0.82, 0.165, 1),
+		top 1s cubic-bezier(0.45, 0.82, 0.165, 1);
 }
 
 .grid-slot-link:hover {

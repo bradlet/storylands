@@ -61,7 +61,7 @@ export default function Grid({
 			// TODO: Manage css in jsx modules to maintain single const for delay
 			setTimeout(() => {
 				coordinateSetter([x, y]);
-			}, 1_000);
+			}, 700);
 		});
 	};
 
