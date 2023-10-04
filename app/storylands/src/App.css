@@ -5,13 +5,6 @@
 	text-align: center;
 }
 
-.back_arrow_icon {
-	position: relative;
-	top: -5.5em;
-	left: -20em;
-	height: 3em;
-	width: 3em;
-}
 .back_arrow_icon:hover {
 	fill: #3aa7f0;
 }

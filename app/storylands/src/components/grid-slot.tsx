@@ -2,7 +2,7 @@ import classes from "./grid-slot.module.css";
 // Unecessary workaround to VS Code spurious error
 const { gridSlotContainer, slotDivider } = classes;
 
-export type InitialGridSlot = {
+export type GridSlotProps = {
 	x: number;
 	y: number;
 	title: string;
@@ -10,7 +10,7 @@ export type InitialGridSlot = {
 	body: string;
 };
 
-export function GridSlot(slot: InitialGridSlot) {
+export function GridSlot(slot: GridSlotProps) {
 	const { x, y, title, body } = slot;
 	// const storySlots = body.map((story, index) => (
 	// 	<StoryBodySlot key={index} story={story} />

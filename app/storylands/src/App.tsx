@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { GridSlot, InitialGridSlot } from "./components/grid-slot";
+import { GridSlot, GridSlotProps } from "./components/grid-slot";
 import Grid from "./components/grid";
 import { IDL } from "./idl/storylands";
 import BackIcon from "./assets/back-arrow-icon.svg?react";
@@ -15,16 +15,18 @@ import {
 	Wallet,
 } from "@project-serum/anchor";
 import { Connection } from "@solana/web3.js";
+import { GridSlotForm } from "./components/grid-slot-form";
 
 const PROGRAM_ID = "9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm";
 const GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST =
 	"Fkf8svsZJUXmXSbYkAddR8Pcd311sMcj9c9h8HUdXTkT";
 
 function App() {
+	const [editing, setEditing] = useState<boolean>(false);
 	const [coordinates, setCoordinates] = useState<[number, number] | null>(
 		null
 	);
-	const [slot, setSlot] = useState<InitialGridSlot>(defaultStorySlot);
+	const [slot, setSlot] = useState<GridSlotProps>(defaultStorySlot);
 
 	// const connection = new Connection("http://127.0.0.1:8899", "confirmed");
 	// const wallet = useAnchorWallet();
@@ -37,11 +39,8 @@ function App() {
 			// 	{}
 			// );
 			// setProvider(provider);
-
 			// const program = new Program(IDL, PROGRAM_ID);
-
 			// // program.methods.saveStory(defaultStorySlot).rpc();
-
 			// program.account.gridSlot
 			// 	.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
 			// 	.then((slot) => {
@@ -52,15 +51,43 @@ function App() {
 		}
 	});
 
+	function returnHome() {
+		setCoordinates(null);
+		setEditing(false);
+	}
+
 	return (
 		<>
 			<h1>Storylands</h1>
 			{coordinates ? (
 				<div>
-					<a onClick={() => setCoordinates(null)}>
-						<BackIcon />
-					</a>
-					<GridSlot {...slot} />
+					<div>
+						<a onClick={returnHome}>
+							<BackIcon />
+						</a>
+						{editing ? (
+							<a
+								onClick={() => {
+									setEditing(false);
+								}}
+							>
+								Save
+							</a>
+						) : (
+							<a
+								onClick={() => {
+									setEditing(true);
+								}}
+							>
+								Edit
+							</a>
+						)}
+					</div>
+					{editing ? (
+						<GridSlotForm {...slot} />
+					) : (
+						<GridSlot {...slot} />
+					)}
 				</div>
 			) : (
 				<Grid id="grid" coordinateSetter={setCoordinates} />
