@@ -63,7 +63,7 @@ function App() {
 									setEditing(false);
 								}}
 							>
-								Save
+								Stop editing
 							</a>
 						) : (
 							<a
