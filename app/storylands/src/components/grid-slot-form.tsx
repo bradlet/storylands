@@ -8,6 +8,7 @@ import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { IDL } from "../idl/storylands";
 import { PROGRAM_ID } from "../App";
+import { Keypair } from "@solana/web3.js";
 
 export type GridSlotFormProps = {
 	x: number;
@@ -26,8 +27,21 @@ export function GridSlotForm({ x, y }: GridSlotFormProps) {
 
 	function saveStory() {
 		try {
+			if (wallet === undefined) {
+				throw Error("No wallet connection detected.");
+			}
+			const storySlotKeypair = new Keypair();
+
 			const program = new Program(IDL, PROGRAM_ID, provider);
-			program.methods.saveStory({ x, y, title, body, imgPreset }).rpc();
+			program.methods
+				.saveStory({ x, y, title, body, imgPreset })
+				.accounts({
+					gridSlot: storySlotKeypair.publicKey,
+					storyWriter: wallet?.publicKey,
+				})
+				.signers([storySlotKeypair])
+				.rpc();
+			console.log(`Saved new story at ${storySlotKeypair.publicKey}`);
 		} catch (e: unknown) {
 			console.error(e);
 		}

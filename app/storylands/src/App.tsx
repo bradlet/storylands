@@ -17,6 +17,7 @@ import {
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 
 export const PROGRAM_ID = "EJF8SF4uBXdwVXjHWZumW52kvJjymgjihv9MsVRcyJfP";
+export const TARGET_STORY = "test";
 
 function App() {
 	const [editing, setEditing] = useState<boolean>(false);
@@ -34,7 +35,7 @@ function App() {
 	useEffect(() => {
 		try {
 			const program = new Program(IDL, PROGRAM_ID, provider);
-			program.account.gridSlot.fetch(PROGRAM_ID).then((slot) => {
+			program.account.gridSlot.fetch(TARGET_STORY).then((slot) => {
 				setSlot(slot);
 			});
 		} catch (e: unknown) {
