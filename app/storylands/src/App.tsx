@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 
-import { GridSlot, GridSlotProps } from "./components/grid-slot";
-import Grid from "./components/grid";
-import { IDL } from "./idl/storylands";
+import { IDL } from "../../../target/types/storylands";
+import "./App.css";
 import BackIcon from "./assets/back-arrow-icon.svg?react";
 import defaultStorySlot from "./assets/default-story-slot.json";
-import "./App.css";
+import Grid from "./components/grid";
+import { GridSlot, GridSlotProps } from "./components/grid-slot";
+import { GridSlotForm } from "./components/grid-slot-form";
 
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import {
 	AnchorProvider,
 	Program,
-	setProvider,
 	Wallet,
+	setProvider,
 } from "@project-serum/anchor";
-import { Connection } from "@solana/web3.js";
-import { GridSlotForm } from "./components/grid-slot-form";
+import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 
-const PROGRAM_ID = "9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm";
-const GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST =
-	"Fkf8svsZJUXmXSbYkAddR8Pcd311sMcj9c9h8HUdXTkT";
+export const PROGRAM_ID = "EJF8SF4uBXdwVXjHWZumW52kvJjymgjihv9MsVRcyJfP";
 
 function App() {
 	const [editing, setEditing] = useState<boolean>(false);
@@ -28,24 +25,18 @@ function App() {
 	);
 	const [slot, setSlot] = useState<GridSlotProps>(defaultStorySlot);
 
-	// const connection = new Connection("http://127.0.0.1:8899", "confirmed");
-	// const wallet = useAnchorWallet();
+
+	const { connection } = useConnection();
+	const wallet = useAnchorWallet();
+	const provider = new AnchorProvider(connection, wallet as Wallet, {});
+	setProvider(provider);
 
 	useEffect(() => {
 		try {
-			// const provider = new AnchorProvider(
-			// 	connection,
-			// 	wallet as Wallet,
-			// 	{}
-			// );
-			// setProvider(provider);
-			// const program = new Program(IDL, PROGRAM_ID);
-			// // program.methods.saveStory(defaultStorySlot).rpc();
-			// program.account.gridSlot
-			// 	.fetch(GRID_SLOT_KEYPAIR_FROM_INTEGRATION_TEST)
-			// 	.then((slot) => {
-			// 		setSlot(slot);
-			// 	});
+			const program = new Program(IDL, PROGRAM_ID);
+			program.account.gridSlot.fetch(PROGRAM_ID).then((slot) => {
+				setSlot(slot);
+			});
 		} catch (e: unknown) {
 			console.error(e);
 		}

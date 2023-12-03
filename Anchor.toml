@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-storylands = "9xDxgwW2LCPBWVrDc5Wucim953CcNzjh7KjPupuq9Vm"
+storylands = "EJF8SF4uBXdwVXjHWZumW52kvJjymgjihv9MsVRcyJfP"
 
 [workspace]
 types = "app/storylands/src/idl/"
