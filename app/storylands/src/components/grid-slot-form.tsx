@@ -26,7 +26,7 @@ export function GridSlotForm({ x, y }: GridSlotFormProps) {
 
 	function saveStory() {
 		try {
-			const program = new Program(IDL, PROGRAM_ID);
+			const program = new Program(IDL, PROGRAM_ID, provider);
 			program.methods.saveStory({ x, y, title, body, imgPreset }).rpc();
 		} catch (e: unknown) {
 			console.error(e);

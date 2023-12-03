@@ -33,7 +33,7 @@ function App() {
 
 	useEffect(() => {
 		try {
-			const program = new Program(IDL, PROGRAM_ID);
+			const program = new Program(IDL, PROGRAM_ID, provider);
 			program.account.gridSlot.fetch(PROGRAM_ID).then((slot) => {
 				setSlot(slot);
 			});
