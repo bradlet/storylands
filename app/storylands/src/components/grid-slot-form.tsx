@@ -1,21 +1,23 @@
 import {
 	AnchorProvider,
+	Idl,
 	Program,
 	Wallet,
 	setProvider,
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import { useState } from "react";
-import { IDL } from "../idl/storylands";
+import { Dispatch, SetStateAction, useState } from "react";
+import idl from "../../../../target/idl/storylands.json";
 import { PROGRAM_ID } from "../App";
-import { Keypair } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
 
 export type GridSlotFormProps = {
 	x: number;
 	y: number;
+	setSlotAccountId: Dispatch<SetStateAction<PublicKey | null>>;
 };
 
-export function GridSlotForm({ x, y }: GridSlotFormProps) {
+export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 	const [title, setTitle] = useState("");
 	const [imgPreset, setImgPreset] = useState(0);
 	const [body, setBody] = useState("");
@@ -32,7 +34,7 @@ export function GridSlotForm({ x, y }: GridSlotFormProps) {
 			}
 			const storySlotKeypair = new Keypair();
 
-			const program = new Program(IDL, PROGRAM_ID, provider);
+			const program = new Program(idl as Idl, PROGRAM_ID);
 			program.methods
 				.saveStory({ x, y, title, body, imgPreset })
 				.accounts({
@@ -41,6 +43,7 @@ export function GridSlotForm({ x, y }: GridSlotFormProps) {
 				})
 				.signers([storySlotKeypair])
 				.rpc();
+			setSlotAccountId(storySlotKeypair.publicKey);
 			console.log(`Saved new story at ${storySlotKeypair.publicKey}`);
 		} catch (e: unknown) {
 			console.error(e);
@@ -61,7 +64,7 @@ export function GridSlotForm({ x, y }: GridSlotFormProps) {
 				/>
 				<h2>Select An Image</h2>
 				<input
-					type="text"
+					type="number"
 					value={imgPreset}
 					onChange={(e) => setImgPreset(parseInt(e.target.value))}
 				/>

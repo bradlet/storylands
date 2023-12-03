@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { IDL } from "../../../target/types/storylands";
+import idl from "../../../target/idl/storylands.json";
 import "./App.css";
 import BackIcon from "./assets/back-arrow-icon.svg?react";
 import defaultStorySlot from "./assets/default-story-slot.json";
@@ -10,22 +10,24 @@ import { GridSlotForm } from "./components/grid-slot-form";
 
 import {
 	AnchorProvider,
+	Idl,
 	Program,
 	Wallet,
 	setProvider,
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
 
 export const PROGRAM_ID = "EJF8SF4uBXdwVXjHWZumW52kvJjymgjihv9MsVRcyJfP";
-export const TARGET_STORY = "test";
+export const TARGET_STORY = "4piVmsk2mXUnXXoauMbWEXBaXWDnECGfiyumCa45cAw5";
 
 function App() {
+	const [slotAccountId, setSlotAccountId] = useState<PublicKey | null>(null);
 	const [editing, setEditing] = useState<boolean>(false);
 	const [coordinates, setCoordinates] = useState<[number, number] | null>(
 		null
 	);
 	const [slot, setSlot] = useState<GridSlotProps>(defaultStorySlot);
-
 
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
@@ -33,15 +35,22 @@ function App() {
 	setProvider(provider);
 
 	useEffect(() => {
+		if (slotAccountId === null) return;
 		try {
-			const program = new Program(IDL, PROGRAM_ID, provider);
-			program.account.gridSlot.fetch(TARGET_STORY).then((slot) => {
-				setSlot(slot);
+			const program = new Program(idl as Idl, PROGRAM_ID);
+			program.account.gridSlot.fetch(slotAccountId).then((slot) => {
+				setSlot({
+					x: slot.x.toNumber(),
+					y: slot.y.toNumber(),
+					title: slot.title,
+					imgPreset: slot.imgPreset.toNumber(),
+					story: slot.story,
+				});
 			});
 		} catch (e: unknown) {
 			console.error(e);
 		}
-	});
+	}, [slotAccountId]);
 
 	function returnHome() {
 		setCoordinates(null);
@@ -51,6 +60,7 @@ function App() {
 	return (
 		<>
 			<h1>Storylands</h1>
+			{slotAccountId && <h2>Story saved at {slotAccountId.toString()}</h2>}
 			{coordinates ? (
 				<div>
 					<div>
@@ -76,7 +86,11 @@ function App() {
 						)}
 					</div>
 					{editing ? (
-						<GridSlotForm {...slot} />
+						<GridSlotForm
+							x={slot.x}
+							y={slot.y}
+							setSlotAccountId={setSlotAccountId}
+						/>
 					) : (
 						<GridSlot {...slot} />
 					)}
