@@ -69,6 +69,7 @@ export default function Grid({
 		for (let j = 0; j < 20; ++j) {
 			gridSlots.push(
 				<a
+					key={`${i},${j}`}
 					id={`slot-${i}-${j}`}
 					className={gridSlotLink}
 					onClick={() => zoomGridSlot(i, j)}
