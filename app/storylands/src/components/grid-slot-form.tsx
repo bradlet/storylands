@@ -4,12 +4,13 @@ import {
 	Program,
 	Wallet,
 	setProvider,
+	web3,
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import idl from "../../../../target/idl/storylands.json";
 import { PROGRAM_ID } from "../App";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 
 export type GridSlotFormProps = {
 	x: number;
@@ -27,16 +28,37 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 	const provider = new AnchorProvider(connection, wallet as Wallet, {});
 	setProvider(provider);
 
-	function saveStory() {
+	function safeSetImgPreset(value: string) {
+		const parsed = parseInt(value) || 0;
+		setImgPreset(parsed);
+	}
+
+	async function saveStory() {
 		try {
 			if (wallet === undefined) {
 				throw Error("No wallet connection detected.");
 			}
-			const storySlotKeypair = new Keypair();
-
+			const storySlotKeypair = web3.Keypair.generate();
 			const program = new Program(idl as Idl, PROGRAM_ID);
-			program.methods
-				.saveStory({ x, y, title, body, imgPreset })
+			console.log(`Wallet detected: ${wallet?.publicKey}`);
+
+			const validImgPreset =
+				typeof imgPreset === "number" &&
+				imgPreset >= 0 &&
+				imgPreset < 256;
+			console.log(
+				validImgPreset ? "Valid" : "Invalid",
+				`Image preset: ${imgPreset} `
+			);
+
+			const sig = await program.methods
+				.saveStory({
+					x: x,
+					y: y,
+					title: title,
+					body: body,
+					imgPreset: validImgPreset ? imgPreset : 0,
+				})
 				.accounts({
 					gridSlot: storySlotKeypair.publicKey,
 					storyWriter: wallet?.publicKey,
@@ -44,9 +66,10 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 				.signers([storySlotKeypair])
 				.rpc();
 			setSlotAccountId(storySlotKeypair.publicKey);
+			console.log(`https://explorer.solana.com/tx/${sig}?cluster=local`);
 			console.log(`Saved new story at ${storySlotKeypair.publicKey}`);
 		} catch (e: unknown) {
-			console.error(e);
+			console.error("Failed to save story: ", e);
 		}
 	}
 
@@ -66,7 +89,7 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 				<input
 					type="number"
 					value={imgPreset}
-					onChange={(e) => setImgPreset(parseInt(e.target.value))}
+					onChange={(e) => safeSetImgPreset(e.target.value)}
 				/>
 				<h2>Story</h2>
 				<textarea

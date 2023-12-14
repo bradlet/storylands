@@ -25,13 +25,3 @@
 	background-color: #67c6ec;
 	transition: none;
 }
-
-.grid-slot-clicked {
-	background-color: #ffffff !important;
-}
-
-.grid-slot-expanded {
-	width: 100vh;
-	height: 100vh;
-	transform: translate(-50%, -50%) scale(1);
-}
