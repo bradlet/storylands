@@ -87,12 +87,16 @@ function App() {
 					</div>
 					{editing ? (
 						<GridSlotForm
-							x={slot.x}
-							y={slot.y}
+							x={coordinates[0]}
+							y={coordinates[1]}
 							setSlotAccountId={setSlotAccountId}
 						/>
 					) : (
-						<GridSlot {...slot} />
+						<GridSlot
+							{...slot}
+							x={coordinates[0]}
+							y={coordinates[1]}
+						/>
 					)}
 				</div>
 			) : (
