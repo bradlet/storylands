@@ -65,9 +65,12 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 				})
 				.signers([storySlotKeypair])
 				.rpc();
-			setSlotAccountId(storySlotKeypair.publicKey);
+			// setTimeout(() => {
+			// 		coordinateSetter([x, y]);
+			// }, 700);
 			console.log(`https://explorer.solana.com/tx/${sig}?cluster=local`);
 			console.log(`Saved new story at ${storySlotKeypair.publicKey}`);
+			setSlotAccountId(storySlotKeypair.publicKey);
 		} catch (e: unknown) {
 			console.error("Failed to save story: ", e);
 		}

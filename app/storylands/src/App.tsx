@@ -39,12 +39,13 @@ function App() {
 		try {
 			const program = new Program(idl as Idl, PROGRAM_ID);
 			program.account.gridSlot.fetch(slotAccountId).then((slot) => {
+				console.log("story slot found:", slot);
 				setSlot({
-					x: slot.x.toNumber(),
-					y: slot.y.toNumber(),
-					title: slot.title,
-					imgPreset: slot.imgPreset.toNumber(),
-					story: slot.story,
+					x: slot.x as number,
+					y: slot.y as number,
+					title: slot.title as string,
+					imgPreset: slot.imgPreset as number,
+					body: slot.story as string,
 				});
 			});
 		} catch (e: unknown) {
@@ -60,7 +61,9 @@ function App() {
 	return (
 		<>
 			<h1>Storylands</h1>
-			{slotAccountId && <h2>Story saved at {slotAccountId.toString()}</h2>}
+			{slotAccountId && (
+				<h2>Story saved at {slotAccountId.toString()}</h2>
+			)}
 			{coordinates ? (
 				<div>
 					<div>

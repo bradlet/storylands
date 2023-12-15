@@ -12,6 +12,7 @@ export type GridSlotProps = {
 
 export function GridSlot(slot: GridSlotProps) {
 	const { x, y, title, imgPreset, body } = slot;
+	console.log("In grid slot", slot);
 	// const storySlots = body.map((story, index) => (
 	// 	<StoryBodySlot key={index} story={story} />
 	// ));
@@ -30,6 +31,7 @@ export function GridSlot(slot: GridSlotProps) {
 }
 
 function StoryBodySlot({ story }: { story: string }) {
+	console.log("In story slot", story);
 	return (
 		<li>
 			<p>{story}</p>
