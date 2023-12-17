@@ -12,24 +12,32 @@ pub mod storylands {
 	}
 }
 
-// Note: Solana transaction limit: 1232 bytes.
+// Note: Solana transaction limit: 1233 bytes.
 #[account]
 #[derive(Default)]
 pub struct GridSlot {
+	bump: u8, // 1
 	x: u8, // 1
 	y: u8, // 1
 	title: String, // Max size 100
     body: String, // Max size 300
-	img_preset: u8 // 1; presets select a provided image to display in the frontend. To forego a preset, select 0.
+	img_preset: u8, // 1; presets select a provided image to display in the frontend. To forego a preset, select 0.
 }
 
 impl GridSlot {
-	const MAX_SIZE: usize = 1 + 1 + 100 + 300 + 1;
+	const MAX_SIZE: usize = 1 + 1 + 1 + 100 + 300 + 1;
 }
 
 #[derive(Accounts)]
+#[instruction(x: u8, y: u8)]
 pub struct SaveStory<'info> {
-	#[account(init, payer = story_writer, space = 8 + GridSlot::MAX_SIZE)]
+	#[account(
+		init,
+		payer = story_writer,
+		space = 8 + GridSlot::MAX_SIZE,
+		seeds = [b"gs".as_ref(), &[x], &[y]],
+		bump
+	)]
 	pub grid_slot: Account<'info, GridSlot>,
 	#[account(mut)]
     pub story_writer: Signer<'info>,

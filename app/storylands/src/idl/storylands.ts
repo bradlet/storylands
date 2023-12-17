@@ -8,7 +8,7 @@ export type Storylands = {
         {
           "name": "gridSlot",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "storyWriter",
@@ -37,6 +37,10 @@ export type Storylands = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
           {
             "name": "x",
             "type": "u8"
@@ -73,7 +77,7 @@ export const IDL: Storylands = {
         {
           "name": "gridSlot",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "storyWriter",
@@ -102,6 +106,10 @@ export const IDL: Storylands = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
           {
             "name": "x",
             "type": "u8"

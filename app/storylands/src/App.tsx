@@ -38,7 +38,7 @@ function App() {
 		if (slotAccountId === null) return;
 		try {
 			const program = new Program(idl as Idl, PROGRAM_ID);
-			program.account.gridSlot.fetch(slotAccountId).then((slot) => {
+			program.account.gridSlot.fetch(slotAccountId).then(slot => {
 				console.log("story slot found:", slot);
 				setSlot({
 					x: slot.x as number,
