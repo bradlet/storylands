@@ -10,13 +10,20 @@ describe("storylands", () => {
 
 	const program = anchor.workspace.Storylands as Program<Storylands>;
 
+	const pdaForCoordinate = (x: number, y: number) => {
+		return PublicKey.findProgramAddressSync(
+			[anchor.utils.bytes.utf8.encode("gs"), new Uint8Array([x, y])],
+			program.programId
+		);
+	};
+
 	it("can save a story", async () => {
 		const target_x = 0;
 		const target_y = 1;
 
-		const [gridSlotPDA, gridSlotBump] = PublicKey.findProgramAddressSync(
-			[anchor.utils.bytes.utf8.encode("gs"), new Uint8Array([target_x, target_y])],
-			program.programId
+		const [gridSlotPDA, gridSlotBump] = pdaForCoordinate(
+			target_x,
+			target_y
 		);
 		const storyWriter = (program.provider as anchor.AnchorProvider).wallet;
 
@@ -42,13 +49,5 @@ describe("storylands", () => {
 		expect(story.title).to.equal("Hello World");
 		expect(story.imgPreset).to.equal(1);
 		expect(story.body).to.equal("Lorem ipsum");
-
-		// Confirm that we can't find some other slot yet
-		// const [uninitializedSlotPDA, _] = PublicKey.findProgramAddressSync(
-		// 	[anchor.utils.bytes.utf8.encode("grid_slot[1,1]")],
-		// 	program.programId
-		// )
-		// let uninitializedSlot = await program.account.gridSlot.fetch(gridSlotPDA);
-		// expect(uninitializedSlot).to.throw
 	});
 });
