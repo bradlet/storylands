@@ -29,13 +29,13 @@ impl GridSlot {
 }
 
 #[derive(Accounts)]
-#[instruction(x: u8, y: u8)]
+#[instruction(data: GridSlot)]
 pub struct SaveStory<'info> {
 	#[account(
 		init,
 		payer = story_writer,
 		space = 8 + GridSlot::MAX_SIZE,
-		seeds = [b"gs".as_ref(), &[x], &[y]],
+		seeds = [b"gs".as_ref(), &[data.x, data.y]],
 		bump
 	)]
 	pub grid_slot: Account<'info, GridSlot>,

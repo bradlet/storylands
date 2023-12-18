@@ -11,19 +11,11 @@ describe("storylands", () => {
 	const program = anchor.workspace.Storylands as Program<Storylands>;
 
 	it("can save a story", async () => {
-		console.log(
-			"Anchor encoding:",
-			anchor.utils.bytes.utf8.encode("gs"),
-			anchor.utils.bytes.utf8.encode("0"),
-			anchor.utils.bytes.utf8.encode("1")
-		);
+		const target_x = 0;
+		const target_y = 1;
+
 		const [gridSlotPDA, gridSlotBump] = PublicKey.findProgramAddressSync(
-			// seeds = [b"gs".as_ref(), &[x], &[y]],
-			[
-				anchor.utils.bytes.utf8.encode("gs"),
-				anchor.utils.bytes.utf8.encode("0"),
-				anchor.utils.bytes.utf8.encode("1"),
-			],
+			[anchor.utils.bytes.utf8.encode("gs"), new Uint8Array([target_x, target_y])],
 			program.programId
 		);
 		const storyWriter = (program.provider as anchor.AnchorProvider).wallet;
@@ -31,8 +23,8 @@ describe("storylands", () => {
 		await program.methods
 			.saveStory({
 				bump: gridSlotBump,
-				x: 0,
-				y: 1,
+				x: target_x,
+				y: target_y,
 				title: "Hello World",
 				body: "Lorem ipsum",
 				imgPreset: 1,
