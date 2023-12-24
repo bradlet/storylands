@@ -5,6 +5,15 @@
 	text-align: center;
 }
 
+a {
+	color: #ffffff;
+	background-color: #3aa7f0;
+}
+
+a:hover {
+	color: #0c354e;
+}
+
 .back_arrow_icon:hover {
 	fill: #3aa7f0;
 }

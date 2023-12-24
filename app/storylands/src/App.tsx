@@ -83,7 +83,11 @@ function App() {
 							<BackIcon />
 						</a>
 						{editing ? (
-							<a onClick={() => {goBack(!slot)}}>
+							<a
+								onClick={() => {
+									goBack(!slot);
+								}}
+							>
 								Stop editing
 							</a>
 						) : (
