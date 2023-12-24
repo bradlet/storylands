@@ -23,10 +23,9 @@ export const TARGET_STORY = "4piVmsk2mXUnXXoauMbWEXBaXWDnECGfiyumCa45cAw5";
 
 function App() {
 	const [slotAccountId, setSlotAccountId] = useState<PublicKey | null>(null);
+	const [viewing, setViewing] = useState<boolean>(false);
 	const [editing, setEditing] = useState<boolean>(false);
-	const [coordinates, setCoordinates] = useState<[number, number] | null>(
-		null
-	);
+	const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
 	const [slot, setSlot] = useState<GridSlotProps>(defaultStorySlot);
 
 	const { connection } = useConnection();
@@ -38,7 +37,7 @@ function App() {
 		if (slotAccountId === null) return;
 		try {
 			const program = new Program(idl as Idl, PROGRAM_ID);
-			program.account.gridSlot.fetch(slotAccountId).then(slot => {
+			program.account.gridSlot.fetch(slotAccountId).then((slot) => {
 				console.log("story slot found:", slot);
 				setSlot({
 					x: slot.x as number,
@@ -54,7 +53,7 @@ function App() {
 	}, [slotAccountId]);
 
 	function returnHome() {
-		setCoordinates(null);
+		setViewing(false);
 		setEditing(false);
 	}
 
@@ -64,7 +63,10 @@ function App() {
 			{slotAccountId && (
 				<h2>Story saved at {slotAccountId.toString()}</h2>
 			)}
-			{coordinates ? (
+			<h2>
+				({coordinates[0]}, {coordinates[1]})
+			</h2>
+			{viewing ? (
 				<div>
 					<div>
 						<a onClick={returnHome}>
@@ -103,7 +105,11 @@ function App() {
 					)}
 				</div>
 			) : (
-				<Grid id="grid" coordinateSetter={setCoordinates} />
+				<Grid
+					id="grid"
+					coordinateSetter={setCoordinates}
+					viewingFlagSetter={setViewing}
+				/>
 			)}
 		</>
 	);
