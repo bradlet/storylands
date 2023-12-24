@@ -4,21 +4,20 @@ import {
 	Program,
 	Wallet,
 	setProvider,
-	web3,
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import idl from "../../../../target/idl/storylands.json";
 import { PROGRAM_ID } from "../App";
-import { PublicKey } from "@solana/web3.js";
+import { getStoryAddress } from "../util/grid-util";
 
 export type GridSlotFormProps = {
 	x: number;
 	y: number;
-	setSlotAccountId: Dispatch<SetStateAction<PublicKey | null>>;
+	setEditing: Dispatch<SetStateAction<boolean>>;
 };
 
-export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
+export function GridSlotForm({ x, y, setEditing }: GridSlotFormProps) {
 	const [title, setTitle] = useState("");
 	const [imgPreset, setImgPreset] = useState(0);
 	const [body, setBody] = useState("");
@@ -38,13 +37,13 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 			if (wallet === undefined) {
 				throw Error("No wallet connection detected.");
 			}
-			const program = new Program(idl as Idl, PROGRAM_ID);
-			const encoder = new TextEncoder();
-			const [gridSlotPda, gridSlotBump] = PublicKey.findProgramAddressSync(
-				[encoder.encode("gs"), new Uint8Array([x, y])],
-				program.programId
-			);
 			console.log(`Wallet detected: ${wallet?.publicKey}`);
+
+			const program = new Program(idl as Idl, PROGRAM_ID);
+			const [gridSlotPda, gridSlotBump] = getStoryAddress(program, [
+				x,
+				y,
+			]);
 
 			const validImgPreset =
 				typeof imgPreset === "number" &&
@@ -69,12 +68,13 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 					storyWriter: wallet?.publicKey,
 				})
 				.rpc();
+			// Note: If I want a delat on setting it for whatever reason...
 			// setTimeout(() => {
 			// 		coordinateSetter([x, y]);
 			// }, 700);
 			console.log(`https://explorer.solana.com/tx/${sig}?cluster=local`);
 			console.log(`Saved new story at ${gridSlotPda}`);
-			setSlotAccountId(gridSlotPda);
+			setEditing(false);
 		} catch (e: unknown) {
 			console.error("Failed to save story: ", e);
 		}

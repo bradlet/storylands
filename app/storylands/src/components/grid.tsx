@@ -5,7 +5,7 @@ const { gridContainer, gridSlotLink } = classes;
 
 type GridProps = {
 	id: string;
-	coordinateSetter: Dispatch<SetStateAction<[number, number] | null>>;
+	coordinateSetter: Dispatch<SetStateAction<[number, number]>>;
 	viewingFlagSetter: Dispatch<SetStateAction<boolean>>;
 };
 

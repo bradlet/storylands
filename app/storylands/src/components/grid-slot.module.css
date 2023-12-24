@@ -7,9 +7,32 @@
 	border: 2px solid #000000;
 	border-radius: 4px;
 	list-style-type: none;
-	box-shadow: 5px 5px #EEEEEE;
+	box-shadow: 5px 5px #eeeeee;
 }
 
 .slot-divider {
 	width: 50%;
+}
+
+.logo {
+	height: 5em;
+	width: 5em;
+	padding: 1.5em;
+	will-change: filter;
+	transition: filter 300ms;
+}
+
+@keyframes logo-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.logo {
+		animation: logo-spin infinite 4s linear;
+	}
 }

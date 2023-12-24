@@ -1,24 +1,24 @@
 import classes from "./grid-slot.module.css";
+import ReactIcon from "../assets/react.svg?react";
 // Unecessary workaround to VS Code spurious error
-const { gridSlotContainer, slotDivider } = classes;
+const { gridSlotContainer, slotDivider, logo } = classes;
 
 export type GridSlotProps = {
 	x: number;
 	y: number;
-	title: string;
-	imgPreset: number;
-	body: string;
+	title?: string;
+	imgPreset?: number;
+	body?: string;
 };
 
 export function GridSlot(slot: GridSlotProps) {
 	const { x, y, title, imgPreset, body } = slot;
-	console.log("In grid slot", slot);
 	// const storySlots = body.map((story, index) => (
 	// 	<StoryBodySlot key={index} story={story} />
 	// ));
-	const storySlots = <StoryBodySlot story={body} />;
+	const storySlots = <StoryBodySlot story={body ?? "Missing story"} />;
 
-	return (
+	return title ? (
 		<>
 			<div>
 				({x}, {y})
@@ -27,11 +27,12 @@ export function GridSlot(slot: GridSlotProps) {
 			<div>Img: {imgPreset}</div>
 			<ul className={gridSlotContainer}>{storySlots}</ul>
 		</>
+	) : (
+		<ReactIcon className={logo} />
 	);
 }
 
 function StoryBodySlot({ story }: { story: string }) {
-	console.log("In story slot", story);
 	return (
 		<li>
 			<p>{story}</p>

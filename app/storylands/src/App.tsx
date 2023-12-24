@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import idl from "../../../target/idl/storylands.json";
 import "./App.css";
 import BackIcon from "./assets/back-arrow-icon.svg?react";
-import defaultStorySlot from "./assets/default-story-slot.json";
 import Grid from "./components/grid";
 import { GridSlot, GridSlotProps } from "./components/grid-slot";
 import { GridSlotForm } from "./components/grid-slot-form";
@@ -16,17 +15,15 @@ import {
 	setProvider,
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
+import { getStoryAddress } from "./util/grid-util";
 
 export const PROGRAM_ID = "EJF8SF4uBXdwVXjHWZumW52kvJjymgjihv9MsVRcyJfP";
-export const TARGET_STORY = "4piVmsk2mXUnXXoauMbWEXBaXWDnECGfiyumCa45cAw5";
 
 function App() {
-	const [slotAccountId, setSlotAccountId] = useState<PublicKey | null>(null);
 	const [viewing, setViewing] = useState<boolean>(false);
 	const [editing, setEditing] = useState<boolean>(false);
 	const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
-	const [slot, setSlot] = useState<GridSlotProps>(defaultStorySlot);
+	const [slot, setSlot] = useState<GridSlotProps | null>(null);
 
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
@@ -34,23 +31,25 @@ function App() {
 	setProvider(provider);
 
 	useEffect(() => {
-		if (slotAccountId === null) return;
 		try {
-			const program = new Program(idl as Idl, PROGRAM_ID);
-			program.account.gridSlot.fetch(slotAccountId).then((slot) => {
-				console.log("story slot found:", slot);
-				setSlot({
-					x: slot.x as number,
-					y: slot.y as number,
-					title: slot.title as string,
-					imgPreset: slot.imgPreset as number,
-					body: slot.story as string,
+			if (viewing) {
+				const program = new Program(idl as Idl, PROGRAM_ID);
+				const [storySlotPda] = getStoryAddress(program, coordinates);
+				program.account.gridSlot.fetch(storySlotPda).then((slot) => {
+					console.log("story slot found:", slot);
+					setSlot({
+						x: slot.x as number,
+						y: slot.y as number,
+						title: slot.title as string,
+						imgPreset: slot.imgPreset as number,
+						body: slot.body as string,
+					});
 				});
-			});
+			}
 		} catch (e: unknown) {
 			console.error(e);
 		}
-	}, [slotAccountId]);
+	}, [coordinates, viewing]);
 
 	function returnHome() {
 		setViewing(false);
@@ -60,9 +59,6 @@ function App() {
 	return (
 		<>
 			<h1>Storylands</h1>
-			{slotAccountId && (
-				<h2>Story saved at {slotAccountId.toString()}</h2>
-			)}
 			<h2>
 				({coordinates[0]}, {coordinates[1]})
 			</h2>
@@ -94,7 +90,7 @@ function App() {
 						<GridSlotForm
 							x={coordinates[0]}
 							y={coordinates[1]}
-							setSlotAccountId={setSlotAccountId}
+							setEditing={setEditing}
 						/>
 					) : (
 						<GridSlot
