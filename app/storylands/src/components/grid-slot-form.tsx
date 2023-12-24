@@ -38,8 +38,12 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 			if (wallet === undefined) {
 				throw Error("No wallet connection detected.");
 			}
-			const storySlotKeypair = web3.Keypair.generate();
 			const program = new Program(idl as Idl, PROGRAM_ID);
+			const encoder = new TextEncoder();
+			const [gridSlotPda, gridSlotBump] = PublicKey.findProgramAddressSync(
+				[encoder.encode("gs"), new Uint8Array([x, y])],
+				program.programId
+			);
 			console.log(`Wallet detected: ${wallet?.publicKey}`);
 
 			const validImgPreset =
@@ -53,6 +57,7 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 
 			const sig = await program.methods
 				.saveStory({
+					bump: gridSlotBump,
 					x: x,
 					y: y,
 					title: title,
@@ -60,17 +65,16 @@ export function GridSlotForm({ x, y, setSlotAccountId }: GridSlotFormProps) {
 					imgPreset: validImgPreset ? imgPreset : 0,
 				})
 				.accounts({
-					gridSlot: storySlotKeypair.publicKey,
+					gridSlot: gridSlotPda,
 					storyWriter: wallet?.publicKey,
 				})
-				.signers([storySlotKeypair])
 				.rpc();
 			// setTimeout(() => {
 			// 		coordinateSetter([x, y]);
 			// }, 700);
 			console.log(`https://explorer.solana.com/tx/${sig}?cluster=local`);
-			console.log(`Saved new story at ${storySlotKeypair.publicKey}`);
-			setSlotAccountId(storySlotKeypair.publicKey);
+			console.log(`Saved new story at ${gridSlotPda}`);
+			setSlotAccountId(gridSlotPda);
 		} catch (e: unknown) {
 			console.error("Failed to save story: ", e);
 		}
