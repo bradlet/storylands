@@ -44,10 +44,15 @@ function App() {
 						imgPreset: slot.imgPreset as number,
 						body: slot.body as string,
 					});
+				}, () => {
+					setSlot(null);
+					setEditing(true);
 				});
 			}
 		} catch (e: unknown) {
 			console.error(e);
+			setSlot(null);
+			setEditing(true);
 		}
 	}, [coordinates, viewing]);
 
@@ -72,6 +77,9 @@ function App() {
 							<a
 								onClick={() => {
 									setEditing(false);
+									if (!slot) {
+										setViewing(false);
+									}
 								}}
 							>
 								Stop editing
