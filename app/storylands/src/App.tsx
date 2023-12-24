@@ -35,19 +35,22 @@ function App() {
 			if (viewing) {
 				const program = new Program(idl as Idl, PROGRAM_ID);
 				const [storySlotPda] = getStoryAddress(program, coordinates);
-				program.account.gridSlot.fetch(storySlotPda).then((slot) => {
-					console.log("story slot found:", slot);
-					setSlot({
-						x: slot.x as number,
-						y: slot.y as number,
-						title: slot.title as string,
-						imgPreset: slot.imgPreset as number,
-						body: slot.body as string,
-					});
-				}, () => {
-					setSlot(null);
-					setEditing(true);
-				});
+				program.account.gridSlot.fetch(storySlotPda).then(
+					(slot) => {
+						console.log("story slot found:", slot);
+						setSlot({
+							x: slot.x as number,
+							y: slot.y as number,
+							title: slot.title as string,
+							imgPreset: slot.imgPreset as number,
+							body: slot.body as string,
+						});
+					},
+					() => {
+						setSlot(null);
+						setEditing(true);
+					}
+				);
 			}
 		} catch (e: unknown) {
 			console.error(e);
@@ -56,10 +59,16 @@ function App() {
 		}
 	}, [coordinates, viewing]);
 
-	function returnHome() {
-		setViewing(false);
+	const goBack = (home: boolean) => {
 		setEditing(false);
-	}
+		if (home) {
+			setViewing(false);
+		}
+	};
+
+	const returnHome = () => {
+		goBack(true);
+	};
 
 	return (
 		<>
@@ -74,14 +83,7 @@ function App() {
 							<BackIcon />
 						</a>
 						{editing ? (
-							<a
-								onClick={() => {
-									setEditing(false);
-									if (!slot) {
-										setViewing(false);
-									}
-								}}
-							>
+							<a onClick={() => {goBack(!slot)}}>
 								Stop editing
 							</a>
 						) : (
