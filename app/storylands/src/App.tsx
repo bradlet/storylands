@@ -82,23 +82,12 @@ function App() {
 						<a onClick={returnHome}>
 							<BackIcon />
 						</a>
-						{editing ? (
-							<a
-								onClick={() => {
-									goBack(!slot);
-								}}
-							>
-								Stop editing
-							</a>
-						) : (
-							<a
-								onClick={() => {
-									setEditing(true);
-								}}
-							>
-								Edit
-							</a>
-						)}
+						<a
+							className="button"
+							onClick={() => editing ? goBack(!slot) : setEditing(true) }
+						>
+							{editing ? "Stop editing" : "Edit"}
+						</a>
 					</div>
 					{editing ? (
 						<GridSlotForm

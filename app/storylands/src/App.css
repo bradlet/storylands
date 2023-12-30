@@ -5,13 +5,13 @@
 	text-align: center;
 }
 
-a {
-	color: #ffffff;
-	background-color: #3aa7f0;
+a.button {
+	color: #000000;
+	padding: 0.5rem;
 }
 
-a:hover {
-	color: #0c354e;
+a.button:hover {
+	color: #3aa7f0;
 }
 
 .back_arrow_icon:hover {
