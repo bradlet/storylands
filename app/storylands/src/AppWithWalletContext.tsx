@@ -10,8 +10,15 @@ import {
 } from "@solana/wallet-adapter-react-ui";
 import { LOCAL_NET } from "./main";
 import { FC } from "react";
+import styled from "styled-components";
 import App from "./App";
 import "@solana/wallet-adapter-react-ui/styles.css";
+
+const StyledWalletBar = styled.div`
+	height: 5vh;
+	display: flex;
+	justify-content: space-between;
+`;
 
 const AppWithWalletContext: FC = () => {
 	const wallets = [new PhantomWalletAdapter()];
@@ -19,8 +26,10 @@ const AppWithWalletContext: FC = () => {
 		<ConnectionProvider endpoint={LOCAL_NET}>
 			<WalletProvider wallets={wallets} autoConnect>
 				<WalletModalProvider>
-					<WalletMultiButton />
-					<WalletDisconnectButton />
+					<StyledWalletBar>
+						<WalletDisconnectButton />
+						<WalletMultiButton style={{}} />
+					</StyledWalletBar>
 					<App />
 				</WalletModalProvider>
 			</WalletProvider>
