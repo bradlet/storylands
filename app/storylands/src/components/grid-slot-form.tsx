@@ -7,6 +7,8 @@ import {
 } from "@project-serum/anchor";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { Dispatch, SetStateAction, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import idl from "../../../../target/idl/storylands.json";
 import { PROGRAM_ID } from "../App";
 import { getStoryAddress } from "../util/grid-util";
@@ -35,7 +37,9 @@ export function GridSlotForm({ x, y, setEditing }: GridSlotFormProps) {
 	async function saveStory() {
 		try {
 			if (wallet === undefined) {
-				throw Error("No wallet connection detected.");
+				toast.error("No wallet connection");
+				console.error("No wallet connection detected");
+				return;
 			}
 			console.log(`Wallet detected: ${wallet?.publicKey}`);
 
@@ -77,6 +81,7 @@ export function GridSlotForm({ x, y, setEditing }: GridSlotFormProps) {
 			setEditing(false);
 		} catch (e: unknown) {
 			console.error("Failed to save story: ", e);
+			toast.error("Unable to save story");
 		}
 	}
 
@@ -105,6 +110,13 @@ export function GridSlotForm({ x, y, setEditing }: GridSlotFormProps) {
 				/>
 			</div>
 			<button onClick={saveStory}>Submit</button>
+			<ToastContainer
+				position="bottom-right"
+				autoClose={3000}
+				theme="dark"
+				closeOnClick
+				hideProgressBar={false}
+			/>
 		</>
 	);
 }
