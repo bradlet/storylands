@@ -50,4 +50,33 @@ describe("storylands", () => {
 		expect(story.imgPreset).to.equal(1);
 		expect(story.body).to.equal("Lorem ipsum");
 	});
+
+	it("can retrieve all stories", async () => {
+		const pdas = await Promise.all(
+			[[1,1], [2,2], [3,3]]
+				.map((async ([x, y]) => {
+					const [gridSlotPDA, gridSlotBump] = pdaForCoordinate(x, y);
+					const storyWriter = (program.provider as anchor.AnchorProvider).wallet;
+
+					await program.methods
+						.saveStory({
+							bump: gridSlotBump,
+							x,
+							y,
+							title: "Hello World",
+							body: "Lorem ipsum",
+							imgPreset: 1,
+						})
+						.accounts({
+							gridSlot: gridSlotPDA,
+							storyWriter: storyWriter.publicKey,
+						})
+						.rpc();
+					return gridSlotPDA;
+				})
+			)
+		)
+		let stories = await program.account.gridSlot.fetchMultiple(pdas);
+		expect(stories.length).to.equal(3)
+	});
 });
