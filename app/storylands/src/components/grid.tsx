@@ -3,6 +3,9 @@ import classes from "./grid.module.css";
 // Unecessary workaround to VS Code spurious error / warning
 const { gridContainer, gridSlotLink } = classes;
 
+// The real grid is much larger, but the UI only displays a square of this size.
+const VIEWABLE_GRID_DIM = 20;
+
 type GridProps = {
 	id: string;
 	coordinateSetter: Dispatch<SetStateAction<[number, number]>>;
@@ -21,8 +24,8 @@ export default function Grid({
 		viewingFlagSetter(view);
 	}
 
-	for (let i = 0; i < 20; ++i) {
-		for (let j = 0; j < 20; ++j) {
+	for (let i = 0; i < VIEWABLE_GRID_DIM; ++i) {
+		for (let j = 0; j < VIEWABLE_GRID_DIM; ++j) {
 			gridSlots.push(
 				<a
 					key={`${i},${j}`}
