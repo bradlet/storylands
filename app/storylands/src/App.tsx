@@ -83,7 +83,6 @@ function App() {
 							<BackIcon />
 						</a>
 						<a
-							className="button"
 							onClick={() => editing ? goBack(!slot) : setEditing(true) }
 						>
 							{editing ? "Stop editing" : "Edit"}

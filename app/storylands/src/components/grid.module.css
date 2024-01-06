@@ -1,8 +1,11 @@
 .grid-container {
 	display: grid;
+	width: 50%;
 	grid-template-rows: repeat(20, 1fr);
 	grid-template-columns: repeat(20, 1fr);
 	gap: 5px;
+	/* TODO: Remove this */
+	/* border: 1px solid black; */
 }
 
 .grid-slot-link {

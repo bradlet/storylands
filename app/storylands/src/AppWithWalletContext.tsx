@@ -15,9 +15,16 @@ import App from "./App";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 const StyledWalletBar = styled.div`
+	width: 50%;
 	height: 5vh;
 	display: flex;
 	justify-content: space-between;
+`;
+
+const AppContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 `;
 
 const AppWithWalletContext: FC = () => {
@@ -26,11 +33,13 @@ const AppWithWalletContext: FC = () => {
 		<ConnectionProvider endpoint={LOCAL_NET}>
 			<WalletProvider wallets={wallets} autoConnect>
 				<WalletModalProvider>
-					<StyledWalletBar>
-						<WalletDisconnectButton />
-						<WalletMultiButton style={{}} />
-					</StyledWalletBar>
-					<App />
+					<AppContainer>
+						<StyledWalletBar>
+							<WalletDisconnectButton />
+							<WalletMultiButton style={{}} />
+						</StyledWalletBar>
+						<App />
+					</AppContainer>
 				</WalletModalProvider>
 			</WalletProvider>
 		</ConnectionProvider>

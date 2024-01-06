@@ -1,5 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
+import {
+	Dispatch,
+	JSXElementConstructor,
+	ReactElement,
+	ReactNode,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import classes from "./grid.module.css";
+import { JSX } from "react/jsx-runtime";
 // Unecessary workaround to VS Code spurious error / warning
 const { gridContainer, gridSlotLink } = classes;
 
@@ -17,22 +26,35 @@ export default function Grid({
 	coordinateSetter,
 	viewingFlagSetter,
 }: GridProps) {
-	const gridSlots = [];
+	const gridSlots: JSX.Element[] = [];
+	const [xOffset, setXOffset] = useState(0);
+	const [yOffset, setYOffset] = useState(0);
 
 	function setCoordinates(coordinatePair: [number, number], view: boolean) {
 		coordinateSetter(coordinatePair);
 		viewingFlagSetter(view);
 	}
 
-	for (let i = 0; i < VIEWABLE_GRID_DIM; ++i) {
-		for (let j = 0; j < VIEWABLE_GRID_DIM; ++j) {
+	// const colors: string[][] = [];
+
+	// for (let y = 0; y < VIEWABLE_GRID_DIM + yOffset; ++y) {
+	// 	const row: string[] = [];
+	// 	for (let x = 0; x < VIEWABLE_GRID_DIM + xOffset; ++x) {
+	// 		row[x] = "#a44141";
+	// 	}
+	// 	colors[y] = row;
+	// }
+
+	for (let x = 0; x < VIEWABLE_GRID_DIM + xOffset; ++x) {
+		for (let y = 0; y < VIEWABLE_GRID_DIM + yOffset; ++y) {
 			gridSlots.push(
 				<a
-					key={`${i},${j}`}
-					id={`slot-${i}-${j}`}
+					key={`${x},${y}`}
+					id={`slot-${x}-${y}`}
 					className={gridSlotLink}
-					onClick={() => setCoordinates([i, j], true)}
-					onMouseOver={() => setCoordinates([i, j], false)}
+					// style={{ backgroundColor: colors[x][y] }}
+					onClick={() => setCoordinates([x, y], true)}
+					onMouseOver={() => setCoordinates([x, y], false)}
 				></a>
 			);
 		}
@@ -41,6 +63,7 @@ export default function Grid({
 	return (
 		<div id={id} className={gridContainer}>
 			{gridSlots}
+			{/* {gridSlots.length != 0 ? gridSlots : <p>Nothing Here</p>} */}
 		</div>
 	);
 }
